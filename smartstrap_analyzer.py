@@ -195,6 +195,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('serial_port', type=str,
                         help="Serial port (e.g. /dev/cu.usbserial-xxxxxxxB or /dev/ttyUSB0).")
+    parser.add_argument('--baud_rate', type=int, help="The baud rate to run at", default=9600)
     args = parser.parse_args()
-    s = open_serial_port(args.serial_port, 57600)
+    s = open_serial_port(args.serial_port, args.baud_rate)
     decode_frames(s)

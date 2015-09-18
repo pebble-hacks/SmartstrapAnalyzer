@@ -3,7 +3,6 @@ import serial
 from array import array
 from struct import *
 import hdlc
-import pyftdi.serialext
 
 
 def crc8_calculate(data):
@@ -171,6 +170,8 @@ class Frame:
 
 
 def open_serial_port(tty, baud_rate):
+    if "ftdi://" in tty:
+        import pyftdi.serialext
     s = serial.serial_for_url(tty, baudrate=baud_rate, timeout=0.001)
     s.open()
     s.udev.set_event_char(0x7E, True)
@@ -178,7 +179,6 @@ def open_serial_port(tty, baud_rate):
         raise Exception("Failed to open tty!")
     return s
 
-import time
 def decode_frames(s):
     context = hdlc.get_context();
     while True:
@@ -196,7 +196,5 @@ if __name__ == "__main__":
     parser.add_argument('serial_port', type=str,
                         help="Serial port (e.g. /dev/cu.usbserial-xxxxxxxB or /dev/ttyUSB0).")
     args = parser.parse_args()
-    #tty_accessory = "ftdi://ftdi:4232:1/4"
-    #tty_accessory = "ftdi://ftdi:230x:DA010MPD/2"
     s = open_serial_port(args.serial_port, 57600)
     decode_frames(s)

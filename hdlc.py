@@ -48,12 +48,3 @@ def decode_data_streaming(context, s):
                     # store frame byte
                     context['frame'].append(i)
     return None
-
-
-def decode_stream(s, callback):
-    context = get_context();
-    while True:
-        result = decode_data_streaming(context, s);
-        if result:
-            callback(result)
-            context = get_context()
